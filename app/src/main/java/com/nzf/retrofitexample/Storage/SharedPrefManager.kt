@@ -6,7 +6,7 @@ import android.content.SharedPreferences
 
 class SharedPrefManager private constructor(mCtx: Context) {
     private val mCtx: Context
-    fun saveUser(user: User) {
+ /*   fun saveUser(user: User) {
         val sharedPreferences: SharedPreferences =
             mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
@@ -15,9 +15,9 @@ class SharedPrefManager private constructor(mCtx: Context) {
         editor.putString("name", user.name)
         editor.putString("school", user.school)
         editor.apply()
-    }
+    }*/
 
-    val isLoggedIn: Boolean
+  /*  val isLoggedIn: Boolean
         get() {
             val sharedPreferences: SharedPreferences =
                 mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
@@ -33,7 +33,7 @@ class SharedPrefManager private constructor(mCtx: Context) {
                 sharedPreferences.getString("name", null)!!,
                 sharedPreferences.getString("school", null)!!
             )
-        }
+        }*/
 
     fun clear() {
         val sharedPreferences: SharedPreferences =
