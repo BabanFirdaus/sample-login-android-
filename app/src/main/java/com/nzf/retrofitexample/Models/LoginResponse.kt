@@ -1,3 +1,8 @@
 package com.nzf.retrofitexample.Models
+import com.google.gson.annotations.SerializedName
 
-data class LoginResponse(val  error: Boolean, val message: String, val user: User)
+
+data class LoginResponse(
+    @SerializedName("token")
+    var token: String
+)

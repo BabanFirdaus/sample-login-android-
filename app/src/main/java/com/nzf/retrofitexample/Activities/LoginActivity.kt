@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.nzf.retrofitexample.Api.RetrofitClient
+import com.nzf.retrofitexample.Models.LoginParam
 import com.nzf.retrofitexample.Models.LoginResponse
 import com.nzf.retrofitexample.R
 import com.nzf.retrofitexample.Storage.SharedPrefManager
@@ -20,6 +21,8 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        editTextEmail.setText("eve.holt@reqres.in")
+        editTextPassword.setText("cityslicka")
 
         buttonLogin.setOnClickListener{
             val email = editTextEmail.text.toString().trim()
@@ -36,18 +39,27 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            RetrofitClient.instance.userLogin(email,password)
+            RetrofitClient.instance.userLogin(LoginParam(email,password))
                 .enqueue(object: Callback<LoginResponse>{
                     override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-
-                        if (!response.body()?.error!!){
-                            SharedPrefManager.getInstance(applicationContext)?.saveUser(response.body()?.user!!)
-                            val intent = Intent(applicationContext,ProfileActivity::class.java)
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivity(intent)
-
-                        } else {
-                            Toast.makeText(applicationContext,response.body()?.message,Toast.LENGTH_LONG).show()
+                        if (response.isSuccessful){
+                            if (response.code()==200) {
+                                Toast.makeText(
+                                    this@LoginActivity,
+                                    "to next page",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            }else{
+                                Toast.makeText(
+                                    this@LoginActivity,
+                                    response.message(),
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            }
+                        }else{
+                            Toast.makeText(this@LoginActivity, response.message(), Toast.LENGTH_SHORT).show()
                         }
                     }
 

@@ -3,8 +3,6 @@ package com.nzf.retrofitexample.Storage
 import android.content.Context
 import android.content.SharedPreferences
 
-import com.nzf.retrofitexample.Models.User
-
 
 class SharedPrefManager private constructor(mCtx: Context) {
     private val mCtx: Context

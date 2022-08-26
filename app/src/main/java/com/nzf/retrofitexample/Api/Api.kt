@@ -1,9 +1,9 @@
 package com.nzf.retrofitexample.Api
 
-import android.provider.ContactsContract
-import com.nzf.retrofitexample.Models.DefaultResponse
+import com.nzf.retrofitexample.Models.LoginParam
 import com.nzf.retrofitexample.Models.LoginResponse
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
@@ -20,11 +20,7 @@ interface Api {
 
     ):Call<DefaultResponse>
 
-    @FormUrlEncoded
-    @POST("userlogin")
-    fun userLogin(
-        @Field("email") email: String,
-        @Field("password") password: String
-    ):Call<LoginResponse>
+    @POST("login")
+    fun userLogin(@Body loginParam: LoginParam):Call<LoginResponse>
 
 }

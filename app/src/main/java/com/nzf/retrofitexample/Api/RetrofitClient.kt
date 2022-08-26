@@ -1,34 +1,38 @@
 package com.nzf.retrofitexample.Api
 
 import android.util.Base64
-import okhttp3.OkHttpClient
+import okhttp3.*
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
+
 
 object RetrofitClient {
 
-    private val AUTH = "Basic" + Base64.encodeToString("belalkhan:123456".toByteArray(),Base64.NO_WRAP)
+    //private val AUTH = "Basic" + Base64.encodeToString("belalkhan:123456".toByteArray(),Base64.NO_WRAP)
 
-    private const val BASE_URL = "http://192.168.1.7/myapi/public/"
+    private const val BASE_URL = "https://reqres.in/api/"
 
-    private val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor { chain ->
-            val orginal = chain.request()
 
-            val requestBuilder = orginal.newBuilder()
-                .addHeader("Authorization", AUTH)
-                .method(orginal.method(), orginal.body())
-
-            val request = requestBuilder.build()
-            chain.proceed(request)
-
-        }.build()
+    var httpClient: OkHttpClient =
+        OkHttpClient.Builder() //here we can add Interceptor for dynamical adding headers
+            .addNetworkInterceptor(object : Interceptor {
+                @Throws(IOException::class)
+                override fun intercept(chain: Interceptor.Chain): Response {
+                    val request: Request =
+                        chain.request().newBuilder().build()
+                    return chain.proceed(request)
+                }
+            }) //here we adding Interceptor for full level logging
+            .addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .build()
 
     val instance: Api by lazy {
         val  retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
+            .client(httpClient)
             .build()
         retrofit.create(Api::class.java)
 
